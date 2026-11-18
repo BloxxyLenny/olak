@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="pl-PL">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>0łak — polski rap z Oławy | Winda</title>
+  <meta name="description" content="0łak to raper z Oławy. Autorski polski rap, własne teksty i bity. Posłuchaj singla „Winda” online w MP3 lub FLAC.">
+  <meta name="author" content="0łak">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/ol.png">
+  <link rel="apple-touch-icon" href="assets/ol.png">
+  <!-- SEO_CANONICAL -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --lv: 0;
+      --m: #d4d4d4;
+      --s: #767676;
+      --ln: #262626;
+      --f: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0
+    }
+
+    body {
+      background: #000;
+      color: #f2f2f2;
+      font: 14px/1.6 var(--f);
+      overflow-x: hidden
+    }
+
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1
+    }
+
+    #edgeviz {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      z-index: 4;
+      display: block;
+      width: 100%;
+      height: clamp(76px, 15vh, 136px);
+      pointer-events: none;
+      opacity: .96
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: 0;
+      cursor: pointer
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 5vw;
+      background: #000a;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--ln)
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      color: inherit;
+      text-decoration: none
+    }
+
+    .brand-logo {
+      display: block;
+      width: 52px;
+      height: auto;
+      max-height: 30px;
+      object-fit: contain;
+      flex: 0 0 auto
+    }
+
+    header b {
+      letter-spacing: .3em;
+      font-weight: 800
+    }
+
+    .q {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--s)
+    }
+
+    .seg {
+      display: flex;
+      border: 1px solid #444
+    }
+
+    .seg button {
+      padding: 5px 12px;
+      font-size: 11px;
+      letter-spacing: .1em;
+      transition: .2s
+    }
+
+    .seg button.on {
+      background: #fff;
+      color: #000
+    }
+
+    .seg button:not(.on):not(:disabled):hover {
+      background: #222
+    }
+
+    .seg button:disabled {
+      color: #444;
+      text-decoration: line-through;
+      cursor: not-allowed
+    }
+
+    .hero {
+      min-height: 62vh;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      padding: 8vh 5vw 4vh;
+      gap: 14px
+    }
+
+
+    .skip-link {
+      position: absolute;
+      left: 12px;
+      top: -60px;
+      z-index: 30;
+      padding: 8px 12px;
+      background: #fff;
+      color: #000;
+    }
+
+    .skip-link:focus { top: 12px; }
+
+    .tag {
+      color: var(--s);
+      letter-spacing: .25em;
+      font-size: 12px;
+      text-transform: uppercase
+    }
+
+    .site-title {
+      color: var(--m);
+      font-weight: 800;
+      letter-spacing: .18em;
+    }
+
+    .about {
+      max-width: 520px;
+      margin: auto;
+      color: var(--m);
+      font-weight: 300
+    }
+
+    .about:before {
+      content: '> ';
+      color: var(--s)
+    }
+
+    .about:after {
+      content: '_';
+      animation: bl 1s steps(1) infinite
+    }
+
+    @keyframes bl {
+      50% {
+        opacity: 0
+      }
+    }
+
+    h2 {
+      font-size: 12px;
+      letter-spacing: .3em;
+      color: var(--s);
+      font-weight: 400;
+      padding: 0 5vw 14px
+    }
+
+    h2:before {
+      content: '// '
+    }
+
+    #list {
+      padding: 0 5vw 140px;
+      max-width: 1000px;
+      margin: auto
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 34px 64px 1fr auto;
+      gap: 18px;
+      align-items: center;
+      width: 100%;
+      color: inherit;
+      text-decoration: none;
+      text-align: left;
+      cursor: pointer;
+      padding: 12px 16px;
+      border: 1px solid var(--ln);
+      margin-bottom: -1px;
+      background: #000b;
+      opacity: 0;
+      animation: up .6s forwards;
+      transition: .25s;
+      position: relative;
+      overflow: hidden
+    }
+
+    .row:before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      transform: translateX(-101%);
+      transition: transform .35s;
+      mix-blend-mode: difference
+    }
+
+    .row:hover {
+      border-color: #fff;
+      padding-left: 28px;
+      z-index: 1
+    }
+
+    .row:focus-visible {
+      outline: 1px solid #fff;
+      outline-offset: 2px;
+      z-index: 2
+    }
+
+    .row:hover:before {
+      transform: none
+    }
+
+    .row img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.2);
+      transition: .3s
+    }
+
+    .row:hover img {
+      filter: none;
+      transform: scale(1.08) rotate(-2deg)
+    }
+
+    @keyframes up {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .n {
+      color: var(--s);
+      font-size: 12px
+    }
+
+    .t {
+      display: block;
+      font-size: 18px;
+      font-weight: 700
+    }
+
+    .ar {
+      font-size: 12px
+    }
+
+    .ar .m {
+      color: var(--m)
+    }
+
+    .ar .f {
+      color: var(--s)
+    }
+
+    .y {
+      color: var(--s);
+      font-size: 12px
+    }
+
+    #md {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      overflow: auto;
+      background: #000e;
+      backdrop-filter: blur(14px)
+    }
+
+    #md.on {
+      display: block;
+      animation: fi .3s
+    }
+
+    @keyframes fi {
+      from {
+        opacity: 0
+      }
+    }
+
+    .win {
+      max-width: 1000px;
+      margin: 4vh auto;
+      padding: 28px;
+      border: 1px solid #444;
+      background: #050505;
+      position: relative;
+      animation: pop .4s cubic-bezier(.2, 1.4, .4, 1)
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(.9) translateY(30px);
+        opacity: 0
+      }
+    }
+
+    .x {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 20px;
+      color: var(--s)
+    }
+
+    .x:hover {
+      color: #fff;
+      transform: rotate(90deg)
+    }
+
+    .x {
+      transition: .25s
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: minmax(200px, 340px) 1fr;
+      gap: 30px
+    }
+
+    @media(max-width:720px) {
+      .top {
+        grid-template-columns: 1fr
+      }
+
+      .row {
+        grid-template-columns: 50px 1fr;
+      }
+
+      .row .n,
+      .row .y {
+        display: none
+      }
+
+      .row img {
+        width: 50px;
+        height: 50px
+      }
+    }
+
+    .cov {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      box-shadow: 0 0 calc(20px + var(--lv)*120px) rgba(255, 255, 255, calc(.06 + var(--lv)*.5));
+      transform: scale(calc(1 + var(--lv)*.05))
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: center
+    }
+
+    .info .track-title {
+      font-size: clamp(28px, 5vw, 52px);
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: -.03em
+    }
+
+    .ctl {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap
+    }
+
+    .pp {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #fff;
+      color: #000;
+      font-size: 18px;
+      transition: .2s
+    }
+
+    .pp:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 30px #fff8
+    }
+
+    .loop-btn {
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      flex: 0 0 auto;
+      border: 1px solid #454545;
+      color: #777;
+      font-size: 20px;
+      line-height: 1;
+      transition: .2s
+    }
+
+    .loop-btn:hover,
+    .loop-btn:focus-visible {
+      border-color: #fff;
+      color: #fff;
+      outline: none
+    }
+
+    .loop-btn.on {
+      background: #fff;
+      border-color: #fff;
+      color: #000
+    }
+
+    #wf {
+      width: 100%;
+      height: 96px;
+      cursor: pointer;
+      display: block;
+      margin: 22px 0 4px
+    }
+
+    .tm {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--s)
+    }
+
+    input[type=range] {
+      accent-color: #fff;
+      width: 90px
+    }
+
+    .ly {
+      margin-top: 26px;
+      border-top: 1px solid var(--ln);
+      padding-top: 20px;
+      white-space: pre-wrap;
+      color: var(--m);
+      font-weight: 300;
+      line-height: 1.9;
+      max-height: 50vh;
+      overflow: auto
+    }
+
+    .ly .sc {
+      display: block;
+      color: var(--s);
+      margin-top: 14px
+    }
+
+    #mini {
+      position: fixed;
+      left: 50%;
+      bottom: 16px;
+      transform: translate(-50%, 150%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 18px;
+      background: #111;
+      border: 1px solid #555;
+      transition: .4s;
+      max-width: 92vw
+    }
+
+    #mini.on {
+      transform: translate(-50%)
+    }
+
+    #mini:hover {
+      border-color: #fff
+    }
+
+    #mini #mt {
+      max-width: min(42vw, 260px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    #mini .loop-btn {
+      width: 28px;
+      height: 28px;
+      margin: -3px -7px -3px 0;
+      border-color: transparent;
+      font-size: 18px
+    }
+
+    #mini .loop-btn.on {
+      border-color: #fff
+    }
+
+    #mini i {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      background: #fff
+    }
+
+    #err {
+      padding: 30px 5vw;
+      color: #f66
+    }
+  </style>
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pl_PL">
+  <meta property="og:site_name" content="0łak">
+  <meta property="og:title" content="0łak — polski rap z Oławy | Winda">
+  <meta property="og:description" content="0łak to raper z Oławy. Autorski polski rap, własne teksty i bity. Posłuchaj singla „Winda” online w MP3 lub FLAC.">
+  <meta property="og:image" content="songs/winda/cover.png">
+  <meta property="og:image:alt" content="Okładka singla Winda — 0łak">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1400">
+  <meta property="og:image:height" content="1400">
+  <!-- SEO_OG_URL -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="0łak — polski rap z Oławy | Winda">
+  <meta name="twitter:description" content="Raper z Oławy. Autorski polski rap, własne teksty i bity. Posłuchaj singla „Winda”.">
+  <meta name="twitter:image" content="songs/winda/cover.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "#artist",
+        "name": "0łak",
+        "alternateName": "0ŁAK",
+        "jobTitle": "Raper",
+        "description": "Raper z Oławy tworzący autorski polski rap, własne teksty i bity.",
+        "homeLocation": { "@type": "Place", "name": "Oława, Polska" },
+        "knowsAbout": ["Polski rap", "Hip-hop"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "#website",
+        "name": "0łak",
+        "description": "Oficjalna strona 0łaka — rapera z Oławy. Muzyka, teksty i utwory do słuchania.",
+        "inLanguage": "pl-PL",
+        "publisher": { "@id": "#artist" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "#webpage",
+        "name": "0łak — polski rap z Oławy",
+        "description": "Oficjalna strona 0łaka, rapera z Oławy. Posłuchaj singla Winda i poznaj autorską muzykę.",
+        "inLanguage": "pl-PL",
+        "isPartOf": { "@id": "#website" },
+        "mainEntity": { "@id": "#artist" }
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body><canvas id="bg"></canvas><canvas id="edgeviz" aria-hidden="true"></canvas>
+  <header><a class="brand" href="./" aria-label="0łak — strona główna"><img class="brand-logo" src="assets/logo-header.png" alt=""><b>0ŁAK</b></a>
+    <div class="q"><span>JAKOŚĆ AUDIO</span>
+      <div class="seg" id="qs"><button data-q="mp3">LOW</button><button data-q="flac">HI</button></div>
+    </div>
+  </header>
+  <a class="skip-link" href="#songs">Przejdź do utworów</a>
+  <main id="main-content">
+  <section class="hero" aria-labelledby="page-title">
+    <h1 class="tag site-title" id="page-title">0łak · polski rap z Oławy</h1>
+    <p class="tag">reject modernity · embrace tradition</p>
+    <p class="about">
+      Dostarczam Oławę w bitach, nie w pocztówkowych obrazkach.<br>
+      <b style="font-weight: 900;">Oława na mapie. Oława w głośnikach.</b>
+    </p>
+  </section>
+  <section id="songs" aria-labelledby="songs-heading">
+    <h2 id="songs-heading">UTWORY</h2>
+    <div id="list" aria-label="Utwory 0łaka"></div>
+    <noscript><p><a href="songs/winda/">Posłuchaj singla „Winda” — 0łak</a></p></noscript>
+  </section>
+  </main>
+  <div id="md">
+    <div class="win"><button class="x" id="cl">✕</button>
+      <div class="top"><img class="cov" id="cv">
+        <div class="info">
+          <div class="ar" id="ar"></div>
+          <div class="track-title" id="ti"></div>
+          <div class="y" id="yr"></div>
+          <div class="seg" id="ms" style="align-self:flex-start"><button data-m="song">UTWÓR</button><button
+              data-m="inst" id="bi">INSTRUMENTAL</button></div>
+          <div class="ctl"><button class="pp" id="pp" type="button" aria-label="Odtwórz">▶</button><button
+              class="loop-btn" id="loop-modal" type="button" aria-label="Włącz zapętlenie" aria-pressed="false"
+              title="Włącz zapętlenie">↻</button><label class="y">VOL <input type="range" id="vol"
+                min="0" max="1" step=".01" value=".9"></label></div>
+        </div>
+      </div>
+      <canvas id="wf"></canvas>
+      <div class="tm"><span id="ct">0:00</span><span id="dt">0:00</span></div>
+      <div class="ly" id="ly"></div>
+    </div>
+  </div>
+  <div id="mini"><button id="mp" type="button" aria-label="Odtwórz">▶</button><span id="mt"></span><button
+      class="loop-btn" id="loop-mini" type="button" aria-label="Włącz zapętlenie" aria-pressed="false"
+      title="Włącz zapętlenie">↻</button><i id="mb"></i></div><audio id="a"
+    preload="auto"></audio>
+  <script>
+    const $ = s => document.querySelector(s), R = document.documentElement, a = $('#a');
+    const ST = (k, v) => { try { return v === undefined ? localStorage.getItem(k) : localStorage.setItem(k, v) } catch { } };
+    let Q = ST('olak.quality') === 'mp3' ? 'mp3' : 'flac', T = [], cur = null, mode = 'song', tok = 0, ctx, an, buf, lv = 0, mx = 0, my = 0, hov = -1, loopEnabled = ST('olak.loop') === '1';
+    a.loop = loopEnabled;
+    const fmt = s => isFinite(s) ? Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0') : '0:00';
+    const ex = async u => { try { const r = await fetch(u, { method: 'HEAD' }); return r.ok && !/html/.test(r.headers.get('content-type') || '') } catch { return false } };
+    const first = async l => { for (const u of l) if (await ex(u)) return u; return null };
+    function setQ(q) { Q = q; ST('olak.quality', q); document.querySelectorAll('#qs button').forEach(b => b.classList.toggle('on', b.dataset.q === q)); if (cur) load(true) }
+    document.querySelectorAll('#qs button').forEach(b => b.onclick = () => setQ(b.dataset.q));
+    async function init() {
+      try {
+        const idx = await (await fetch('songs/index.json')).json();
+        T = (await Promise.all(idx.map(async f => {
+          try {
+            const b = `songs/${f}/`, c = await (await fetch(b + 'config.json')).json();
+            const [cover, inst, mp3, flac] = await Promise.all([first([b + 'cover.png', b + 'cover.jpg']), first([b + 'intro.flac', b + 'intro.mp3']), ex(b + 'song.mp3'), ex(b + 'song.flac')]);
+            return { f, b, ...c, cover, inst, mp3: mp3 && b + 'song.mp3', flac: flac && b + 'song.flac', features: c.features || [] }
+          } catch { return null }
+        }))).filter(Boolean).sort((x, y) => (y.order || 0) - (x.order || 0));
+      } catch { $('#list').innerHTML = '<p id="err">! nie udało się wczytać songs/index.json — odpal stronę przez serwer (np. python3 -m http.server), nie z file://</p>'; return }
+      const L = $('#list'); T.forEach((t, i) => {
+        const r = document.createElement('a'); r.className = 'row'; r.href = t.b; r.style.animationDelay = i * .08 + 's';
+        r.setAttribute('aria-label', `Otwórz utwór ${t.title} — ${t.artist}`);
+        r.innerHTML = `<span class="n">${String(i + 1).padStart(2, '0')}</span><img src="${t.cover || ''}" alt=""><span><span class="t"></span><span class="ar"></span></span><span class="y">${t.year}</span>`;
+        const cover = r.querySelector('img'); cover.alt = `Okładka utworu ${t.title} — ${t.artist}`; cover.loading = 'lazy'; cover.decoding = 'async'; cover.width = 64; cover.height = 64;
+        r.querySelector('.t').textContent = t.title; r.querySelector('.ar').replaceChildren(...artists(t));
+        r.addEventListener('click', e => { if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; e.preventDefault(); open(t) }); L.append(r)
+      });
+      route()
+    }
+    function artists(t) {
+      const m = document.createElement('span'); m.className = 'm'; m.textContent = t.artist; const o = [m];
+      if (t.features.length) { const f = document.createElement('span'); f.className = 'f'; f.textContent = ' feat. ' + t.features.join(', '); o.push(f) } return o
+    }
+    const url = () => mode === 'inst' ? cur.inst : (Q === 'flac' ? cur.flac || cur.mp3 : cur.mp3 || cur.flac);
+    function open(t) {
+      if (cur !== t) {
+        a.pause(); cur = t; mode = 'song'; $('#cv').src = t.cover || ''; $('#cv').alt = `Okładka utworu ${t.title} — ${t.artist}`; $('#ti').textContent = t.title; $('#ar').replaceChildren(...artists(t)); $('#yr').textContent = t.year; $('#mt').textContent = t.title + ' — ' + t.artist;
+        $('#bi').disabled = !t.inst; $('#bi').textContent = t.inst ? 'INSTRUMENTAL' : 'INSTRUMENTAL — niedostępny'; $('#ly').textContent = '';
+        fetch(t.b + 'lyrics.txt').then(r => r.ok ? r.text() : '').then(x => { const d = $('#ly'); d.textContent = ''; (x.trim() ? x : 'brak tekstu').split('\n').forEach(l => { const s = document.createElement('span'); s.textContent = l + '\n'; if (/^\s*\[.*\]\s*$/.test(l)) s.className = 'sc'; d.append(s) }) });
+        load(false)
+      }
+      $('#md').classList.add('on'); document.body.style.overflow = 'hidden'; $('#mini').classList.remove('on'); history.replaceState(0, '', '#' + t.f); syncUI()
+    }
+    function close_() { $('#md').classList.remove('on'); document.body.style.overflow = ''; history.replaceState(0, '', location.pathname); if (cur) $('#mini').classList.add('on') }
+    async function load(keep) {
+      const u = url(), t = keep ? a.currentTime : 0, pl = !a.paused; a.src = u; a.onloadedmetadata = () => { a.currentTime = t; if (pl || !keep && 0) a.play() };
+      syncUI(); const my_ = ++tok; cur.pk = null; const w = mode === 'inst' ? cur.inst : (cur.mp3 || cur.flac);
+      try { const p = await peaks(w); if (my_ === tok) cur.pk = p } catch { }
+    }
+    const PK = {}; async function peaks(u, n = 200) {
+      if (PK[u]) return PK[u]; ctx = ctx || new AudioContext(); const d = (await ctx.decodeAudioData(await (await fetch(u)).arrayBuffer())).getChannelData(0), st = Math.floor(d.length / n), p = [];
+      for (let i = 0; i < n; i++) { let s = 0, c = 0; for (let j = i * st; j < (i + 1) * st; j += 6) { s += Math.abs(d[j]); c++ } p.push(s / c) } const m = Math.max(...p); return PK[u] = p.map(v => Math.pow(v / m, .8))
+    }
+    function updateMiniProgress() {
+      const duration = a.duration;
+      const progress = Number.isFinite(duration) && duration > 0
+        ? Math.min(1, Math.max(0, a.currentTime / duration))
+        : 0;
+      $('#mb').style.width = (progress * 100) + '%';
+    }
+    function syncLoopUI() {
+      const label = loopEnabled ? 'Wyłącz zapętlenie' : 'Włącz zapętlenie';
+      ['#loop-modal', '#loop-mini'].forEach(selector => {
+        const button = $(selector);
+        button.classList.toggle('on', loopEnabled);
+        button.setAttribute('aria-pressed', String(loopEnabled));
+        button.setAttribute('aria-label', label);
+        button.title = label;
+      });
+    }
+    function toggleLoop(e) {
+      e.stopPropagation();
+      if (!cur) return;
+      loopEnabled = !loopEnabled;
+      a.loop = loopEnabled;
+      ST('olak.loop', loopEnabled ? '1' : '0');
+      syncLoopUI();
+    }
+    function syncUI() {
+      document.querySelectorAll('#ms button').forEach(b => b.classList.toggle('on', b.dataset.m === mode));
+      const p = a.paused;
+      $('#pp').textContent = p ? '▶' : '❚❚';
+      $('#mp').textContent = p ? '▶' : '❚❚';
+      syncLoopUI();
+      updateMiniProgress();
+    }
+    document.querySelectorAll('#ms button').forEach(b => b.onclick = () => { if (b.disabled || mode === b.dataset.m) return; mode = b.dataset.m; load(true) });
+    const toggle = () => { if (!cur) return; if (!ctx) ctx = new AudioContext(); if (!an) { try { const s = ctx.createMediaElementSource(a); an = ctx.createAnalyser(); an.fftSize = 512; an.smoothingTimeConstant = .72; buf = new Uint8Array(an.frequencyBinCount); s.connect(an); an.connect(ctx.destination) } catch { } } ctx.resume(); a.paused ? a.play() : a.pause() };
+    $('#pp').onclick = $('#mp').onclick = e => { e.stopPropagation(); toggle() };
+    $('#loop-modal').onclick = $('#loop-mini').onclick = toggleLoop;
+    $('#mini').onclick = () => open(cur); $('#cl').onclick = close_; $('#md').onclick = e => { if (e.target.id === 'md') close_() };
+    ['play', 'pause', 'ended'].forEach(e => a.addEventListener(e, syncUI));
+    ['timeupdate', 'durationchange', 'loadedmetadata', 'seeking', 'seeked'].forEach(e => a.addEventListener(e, updateMiniProgress));
+    $('#vol').oninput = e => a.volume = e.target.value; a.volume = .9;
+    addEventListener('keydown', e => { if (!$('#md').classList.contains('on')) return; if (e.key === 'Escape') close_(); else if (e.code === 'Space') { e.preventDefault(); toggle() } else if (e.key === 'ArrowRight') a.currentTime += 5; else if (e.key === 'ArrowLeft') a.currentTime -= 5 });
+    const wf = $('#wf'); let drag = 0; const seek = e => { const r = wf.getBoundingClientRect(); if (a.duration) a.currentTime = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)) * a.duration };
+    wf.onpointerdown = e => { drag = 1; wf.setPointerCapture(e.pointerId); seek(e) }; wf.onpointermove = e => { hov = (e.clientX - wf.getBoundingClientRect().left) / wf.clientWidth; if (drag) seek(e) }; wf.onpointerup = () => drag = 0; wf.onpointerleave = () => hov = -1;
+    function route() { const f = location.hash.slice(1), t = T.find(x => x.f === f); if (t) open(t) } addEventListener('hashchange', () => { const f = location.hash.slice(1); if (!f) $('#md').classList.remove('on'); else if (!cur || cur.f !== f) route() });
+    function drawWf(tm) {
+      const d = devicePixelRatio, w = wf.width = wf.clientWidth * d, h = wf.height = wf.clientHeight * d, x = wf.getContext('2d'), pk = cur.pk, n = pk ? pk.length : 200, bw = w / n, pr = a.duration ? a.currentTime / a.duration : 0, b = h * .62;
+      for (let i = 0; i < n; i++) {
+        const v = pk ? pk[i] : .25 + .2 * Math.sin(i * .3 + tm / 200), on = i / n < pr, hv = hov >= 0 && i / n < hov && !on; const H = Math.max(2 * d, v * b * .95);
+        x.fillStyle = on ? '#fff' : hv ? '#999' : '#5c5c5c'; x.fillRect(i * bw, b - H, bw * .65, H); x.fillStyle = on ? '#ffffff55' : '#ffffff1c'; x.fillRect(i * bw, b + 1, bw * .65, H * .55)
+      }
+      x.fillStyle = '#fff'; x.fillRect(pr * w - 1, 0, 2 * d, h); $('#ct').textContent = fmt(a.currentTime); $('#dt').textContent = fmt(a.duration)
+    }
+    const bg = $('#bg'), g = bg.getContext('2d');
+    const edgeviz = $('#edgeviz'), eg = edgeviz.getContext('2d');
+    let edgeW = 0, edgeH = 0, edgeDpr = 0, edgeBars = [];
+    addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY });
+
+    function resizeEdgeViz() {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const w = Math.max(1, Math.floor(edgeviz.clientWidth));
+      const h = Math.max(1, Math.floor(edgeviz.clientHeight));
+      if (w === edgeW && h === edgeH && dpr === edgeDpr) return;
+      edgeW = w; edgeH = h; edgeDpr = dpr;
+      edgeviz.width = Math.round(w * dpr);
+      edgeviz.height = Math.round(h * dpr);
+      eg.setTransform(dpr, 0, 0, dpr, 0, 0);
+      edgeBars = [];
+    }
+
+    function drawEdgeVisualizer(active) {
+      resizeEdgeViz();
+      const w = edgeW, h = edgeH;
+      eg.clearRect(0, 0, w, h);
+
+      // Denser rows extend towards the middle while keeping a clear gap for the mini-player.
+      const step = w < 560 ? 7 : 10;
+      const span = Math.min(w * .42, 820);
+      const count = Math.max(0, Math.floor(span / step));
+      if (!count) return;
+      const barW = Math.min(6, step * .62);
+      const maxH = Math.min(112, h * .82);
+      const baseY = h - 2;
+      const total = count * 2;
+      while (edgeBars.length < total) edgeBars.push(0);
+      if (edgeBars.length > total) edgeBars.length = total;
+
+      eg.fillStyle = '#fff';
+      for (let side = 0; side < 2; side++) {
+        for (let i = 0; i < count; i++) {
+          // Keep the inner bars substantial; only about half the height is lost by the centre.
+          const position = count > 1 ? i / (count - 1) : 0;
+          const envelope = .48 + .52 * Math.pow(1 - position, 1.1);
+          const maxBin = Math.max(2, (buf && buf.length ? buf.length - 1 : 2));
+          const bin = Math.min(maxBin, 2 + Math.floor(Math.pow(position, 1.2) * Math.min(120, maxBin - 2)));
+          const raw = active && buf ? buf[bin] / 255 : 0;
+          // A small noise gate keeps silent/flat bars completely hidden.
+          const gated = raw > .045 ? (raw - .045) / (1 - .045) : 0;
+          const signal = Math.pow(gated, .72);
+          const target = signal > 0 ? signal * maxH * envelope : 0;
+          const index = side * count + i;
+          const easing = target > edgeBars[index] ? .4 : .22;
+          edgeBars[index] += (target - edgeBars[index]) * easing;
+          if (edgeBars[index] < .35) edgeBars[index] = 0;
+          const barH = edgeBars[index];
+          const x = side === 0 ? 8 + i * step : w - 8 - barW - i * step;
+          if (barH >= 1.2) eg.fillRect(x, baseY - barH, barW, barH);
+        }
+      }
+    }
+
+    function frame(tm) {
+      updateMiniProgress();
+      const audioActive = !!(an && buf && !a.paused && !a.ended);
+      if (audioActive) { an.getByteFrequencyData(buf); let s = 0; for (let i = 0; i < 8; i++)s += buf[i]; lv += (s / 8 / 255 - lv) * .35 } else lv *= .92;
+      R.style.setProperty('--lv', lv.toFixed(3));
+      const W = bg.width = innerWidth, H = bg.height = innerHeight, S = 38; g.fillStyle = '#fff';
+      for (let X = S / 2; X < W; X += S)for (let Y = S / 2; Y < H; Y += S) {
+        const dx = X - mx, dy = Y - my, di = Math.hypot(dx, dy), f = Math.max(0, 1 - di / 220), wv = Math.sin(X * .01 + Y * .013 + tm / 900) * .5 + .5;
+        g.globalAlpha = .09 + wv * .1 + f * .6 + lv * .35 * wv; g.beginPath(); g.arc(X + dx / (di || 1) * f * 14, Y + dy / (di || 1) * f * 14, 1 + f * 2.2 + lv * 2.5 * wv, 0, 7); g.fill()
+      }
+      drawEdgeVisualizer(audioActive);
+      if (cur && $('#md').classList.contains('on')) drawWf(tm); requestAnimationFrame(frame)
+    }
+    setQ(Q); init(); requestAnimationFrame(frame);
+  </script>
+</body>
+
+</html>
